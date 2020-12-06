@@ -1,6 +1,20 @@
 version: "3"
 services:
-  echo:
-    build: .
+  master:
+    container_name: master
+    image: jenkinsci/jenkins:2.142-slim
     ports:
-      - 9000:8000
+      - 8080:8080
+    # コピーではない。ホスト・コンテナ間でファイルを共有する。
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
+    # linksは非推奨？
+    #links:
+    #  - slave01
+
+  slave01:
+    container_name: slave01
+    image: jenkinsci/ssh-slave
+    environment:
+      - JENKINS_SLAVE_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLxvIuvTvHZKhOiBUWsBbTLisIek0KaWZpA0Scw1qnZ0StyrZQMu7gt4quG+5hf73hEJJg+Mmy1OP5K4RsxQh0B4iXJbrXsgKMxpkS9lRe9oqQOxPgDXC4GCdU6mVi173OPXP5UducWg+3+v462IRht2vYGrR8/vAcHEj3/BS81/uv7qIFtG7tzY3y6226N0qbQv9emgvLAoh+f0t2lD3S6wG7gapYVtapU4G9GF4rFl3gdyTqFsFRiW9UcL1afgz2QVIwH+L58IFqqo1STGozKNnp+inO7l5SUaeNQfhCndgbGy+vRY7iZM3coMmyX8x7Ai0owDvSY5RK+MWSLkgt 
+
