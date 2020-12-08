@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  app:
+    image: dockersamples/visualizer
+    # managerコンテナは9000をローカルに開放しているからlocalhost:9000でvisualizerにアクセスできる
+    ports:
+      - "9000:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+      # deploy先をmanagerコンテナに指定
+      placement:
+        constraints: [node.role == manager]
